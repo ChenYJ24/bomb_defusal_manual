@@ -7,7 +7,7 @@
 
 import tkinter as tk
 from tkinter.constants import FALSE, INSERT
-from typing import Text
+from typing import Sized, Text
 
 class Wires():
     def __init__(self):
@@ -80,7 +80,7 @@ class Wires():
         rdio71 = tk.Radiobutton(window, text = '奇數', variable=self.radioValue7, value = 1, command = self.callback).grid(row=6, column=0)
         rdio72 = tk.Radiobutton(window, text = '偶數', variable=self.radioValue7, value = 2, command = self.callback).grid(row=6, column=1)
 
-        # text
+        # label --> show line color
 
         self.line1 = tk.Label(window, text="--------------------------", bg='gray95')
         self.line1.grid(row=0, column=7, columnspan=20)
@@ -100,6 +100,18 @@ class Wires():
         self.line6 = tk.Label(window, text="--------------------------", bg='gray95')
         self.line6.grid(row=5, column=7, columnspan=20)
 
+        self.line_list = []
+        self.line_list.append(self.line1)
+        self.line_list.append(self.line2)
+        self.line_list.append(self.line3)
+        self.line_list.append(self.line4)
+        self.line_list.append(self.line5)
+        self.line_list.append(self.line6)
+
+        # label --> show result
+
+        self.result = tk.Label(window, text="error", fg="red", font=56)
+        self.result.grid(row=10, column=8)
         # candidate line
 
         self.candidate = 0
@@ -121,13 +133,13 @@ class Wires():
                 blue_line += 1
 
         if red_line == 0:
-            return print("cut 2 line")
+            return self.result.configure(text="cut 2 line")
         elif self.candidates[2][1] == 2:
-            return print("cut last line", )
+            return self.result.configure(text="cut last line")
         elif blue_line > 1:
-            return print("cut last blue line")
+            return self.result.configure(text="cut last blue line")
         else:
-            return print("cut last line")
+            return self.result.configure(text="cut last line")
     
     def four_lines(self):
         print(self.candidates)
@@ -143,15 +155,15 @@ class Wires():
                 yellow_line += 1
         
         if red_line > 1 and self.radioValue7.get() == 1:
-            return print("cut last red line")
+            return self.result.configure(text="cut last red line")
         elif red_line == 0 and self.candidates[3][1] == 5:
-            return print("cut first line")
+            return self.result.configure(text="cut first line")
         elif blue_line == 1:
-            return print("cut first line")
+            return self.result.configure(text="cut first line")
         elif yellow_line > 1:
-            return print("cut last line")
+            return self.result.configure(text="cut last line")
         else:
-            return print("cut second line")
+            return self.result.configure(text="cut second line")
 
 
     def five_lines(self):
@@ -168,13 +180,13 @@ class Wires():
                 yellow_line += 1
 
         if self.candidates[4][1] == 4 and self.radioValue7.get() == 1:
-            return print("cut forth line")
+            return self.result.configure(text="cut forth line")
         elif red_line == 1 and yellow_line > 1:
-            return print("cut first line")
+            return self.result.configure(text="cut first line")
         elif black_line == 0:
-            return print("cut second line")
+            return self.result.configure(text="cut second line")
         else:
-            return print("cut first line")
+            return self.result.configure(text="cut first line")
     def six_lines(self):
         print(self.candidates)
         red_line = 0
@@ -189,13 +201,13 @@ class Wires():
                 yellow_line += 1
 
         if yellow_line == 0 and self.radioValue7.get() == 1:
-            return print("cut third line")
+            return self.result.configure(text="cut third line")
         elif yellow_line == 1 and  white_line > 1:
-            return print("cut forth line")
+            return self.result.configure(text="cut forth line")
         elif red_line == 0:
-            return print("cut last line")
+            return self.result.configure(text="cut last line")
         else:
-            return print("cut forth line")
+            return self.result.configure(text="cut forth line")
 
     def process(self):
         index = 0
@@ -220,17 +232,29 @@ class Wires():
         self.line6.configure(bg="gray95")
         for i in self.candidates:
             if i[0] == 1:
-                self.process_color(1)
+                self.process_color(i)
             elif i[0] == 2:
-                self.process_color(2)
+                self.process_color(i)
+            elif i[0] == 3:
+                self.process_color(i)
+            elif i[0] == 4:
+                self.process_color(i)
+            elif i[0] == 5:
+                self.process_color(i)
+            elif i[0] == 6:
+                self.process_color(i)
     
-    def process_color(self,n):
-        if n == 1:
-            print(1)
-        elif n == 2:
-            print(2)
-        else:
-            print(6)
+    def process_color(self,i):
+        if i[1] == 1:
+            self.line_list[i[0]-1].configure(bg="red")
+        elif i[1] == 2:
+            self.line_list[i[0]-1].configure(bg="white")
+        elif i[1] == 3:
+            self.line_list[i[0]-1].configure(bg="blue")
+        elif i[1] == 4:
+            self.line_list[i[0]-1].configure(bg="black")
+        elif i[1] == 5:
+            self.line_list[i[0]-1].configure(bg="yellow")
 
     def num_to_func(self,num):
         numbers = {
